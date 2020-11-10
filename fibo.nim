@@ -20,6 +20,54 @@ var
   t: Table[int, seq[string]]
   v: int
   tt, hl, ml: string
+  pal = 5 # default palette entry
+
+        # old default, plus 10 color palettes from https://github.com/pchretien/fibo/blob/master/fibonacci.ino
+let
+  hpal = [(255, 0, 0),
+          (255, 10, 10),
+          (255, 10, 10),
+          (80, 40, 0),
+          (245, 100, 201),
+          (255, 123, 123),
+          (212, 49, 45),
+          (209, 62, 200),
+          (237, 20, 20),
+          (70, 35, 0),
+          (211, 34, 34)]
+  mpal = [(0, 255, 0),
+          (10, 255, 10),
+          (248, 222, 0),
+          (20, 200, 20),
+          (114, 247, 54),
+          (143, 255, 112),
+          (145, 210, 49),
+          (69, 232, 224),
+          (246, 243, 54),
+          (70, 122, 10),
+          (80, 151, 78)]
+  bpal = [(0, 0, 255),
+          (10, 10, 255),
+          (10, 10, 255),
+          (255, 100, 10),
+          (113, 235, 219),
+          (120, 120, 255),
+          (141, 95, 224),
+          (80, 70, 202),
+          (255, 126, 21),
+          (200, 182, 0),
+          (16, 24, 149)]
+  opal = [(0, 0, 0),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255),
+          (255, 255, 255)]
 
 randomize()
 
@@ -37,13 +85,21 @@ for i1 in 0..1:
 
 proc setcol(i: int) =
   if hl[i] == '1' and ml[i] == '1':
-    render.setDrawColor(0, 0, 255, 255)
+    render.setDrawColor(cast[uint8](bpal[pal][0]),
+                           cast[uint8](bpal[pal][1]),
+                           cast[uint8](bpal[pal][2]))
   elif hl[i] == '1' and ml[i] == '0':
-    render.setDrawColor(255, 0, 0, 255)
+    render.setDrawColor(cast[uint8](hpal[pal][0]),
+                           cast[uint8](hpal[pal][1]),
+                           cast[uint8](hpal[pal][2]))
   elif hl[i] == '0' and ml[i] == '1':
-    render.setDrawColor(0, 255, 0, 255)
+    render.setDrawColor(cast[uint8](mpal[pal][0]),
+                           cast[uint8](mpal[pal][1]),
+                           cast[uint8](mpal[pal][2]))
   else:
-    render.setDrawColor(0, 0, 0, 255)
+    render.setDrawColor(cast[uint8](opal[pal][0]),
+                           cast[uint8](opal[pal][1]),
+                           cast[uint8](opal[pal][2]))
 
 while runGame:
   let
@@ -64,6 +120,11 @@ while runGame:
     if evt.kind == QuitEvent:
       runGame = false
       break
+    if evt.kind == KeyDown and evt.key.keysym.sym == K_SPACE:
+      inc pal
+      if pal > len(opal) - 1:
+        pal = 0
+
   render.setDrawColor(0, 0, 0, 255)
   render.clear
 
