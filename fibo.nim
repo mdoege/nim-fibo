@@ -1,6 +1,6 @@
 ## A Fibonacci 12-hour clock in Nim using SDL2
 
-import sdl2, times, os, tables, random
+import sdl2, times, tables, random
 
 discard sdl2.init(INIT_EVERYTHING)
 
@@ -167,7 +167,7 @@ while runGame:
   render.fillRect(r)
 
   render.present
-  sleep(100)
+  delay(100)
 
 destroy render
 destroy window
